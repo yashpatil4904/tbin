@@ -1,53 +1,49 @@
-def encrypt(plaintext, key_map):
-    ciphertext = ""
-    for ch in plaintext.upper():
-        if ch.isalpha():
-            ciphertext += key_map[ch]
-        else:
-            ciphertext += ch
-    return ciphertext
-
-
-def decrypt(ciphertext, key_map):
-    reverse_map = {v: k for k, v in key_map.items()}
-    plaintext = ""
-    for ch in ciphertext.upper():
-        if ch.isalpha():
-            plaintext += reverse_map[ch]
-        else:
-            plaintext += ch
-    return plaintext
-
-
-def main():
-    # Example fixed key (you can also randomize if needed)
+def encrypt(text,key):
     alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    cipher_alphabet = "QWERTYUIOPASDFGHJKLZXCVBNM"
+    cipher = key.upper()
+    
+    result=""
+    for ch in text.upper() :
+        if ch in alphabet :
+            index = alphabet.index(ch)
+            result += cipher[index]
+        else :
+            result+=ch
+    return result
 
-    key_map = {plain: cipher for plain, cipher in zip(alphabet, cipher_alphabet)}
+def decrypt(ct,key):
+    alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    cipher = key.upper()
+    result=""
+    for ch in ct.upper():
+        if ch in cipher :
+            index = cipher.index(ch)
+            result += alphabet[index]
+        else :
+            result += ch
+    return result
 
-    while True:
-        print("\n===== MONOALPHABETIC CIPHER =====")
-        print("1. Encrypt")
-        print("2. Decrypt")
-        print("3. Exit")
-        choice = input("Enter choice: ").strip()
+    
+def main():
+    key="QWERTYUIOPASDFGHJKLZXCVBNM"
+    print("1.encrypt\n 2.decrypt\n 3.exit\n")
+    while True :
+        choice = int(input("Enter choice"))
 
-        if choice == '1':
-            text = input("Enter plaintext: ")
-            print("Encrypted text:", encrypt(text, key_map))
-
-        elif choice == '2':
-            text = input("Enter ciphertext: ")
-            print("Decrypted text:", decrypt(text, key_map))
-
-        elif choice == '3':
-            print("Exiting...")
+        if choice == 1 :
+            text = input("Enter plain text :")
+            print("Ciphertext : ",encrypt(text,key))
+        elif choice == 2: 
+            ct = input("Enter cipher text")
+            print("Plaintext : ",decrypt(ct,key))
+        elif choice ==3 :
             break
-
         else:
-            print("Invalid choice! Try again.")
-
-
+            print("invalid choice")
+            
 if __name__ == "__main__":
     main()
+        
+        
+        
+        

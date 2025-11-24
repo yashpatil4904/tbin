@@ -1,42 +1,46 @@
 def extended_euclid(a, b):
-    # Initialize remainders
-    r1, r2 = a, b
+    print("\n=== Extended Euclid Table ===")
+    print("a      b      q      r      s1     s2     s      t1     t2     t")
+    print("-----------------------------------------------------------------------")
 
-    # Initialize coefficients for Bézout identity
-    t1, t2 = 1, 0     # corresponds to r1
-    s1, s2 = 0, 1     # corresponds to r2
+    # Initialize
+    a1, b1 = a, b
+    s1, s2 = 1, 0
+    t1, t2 = 0, 1
 
-    print("\n=== Extended Euclidean Algorithm ===")
-    print("a   b   q    t1   t2   s1   s2")
-    print("------------------------------------")
-
-    while r2 != 0:
-        q = r1 // r2    # quotient
-
-        print(f"{r1:<4} {r2:<4} {q:<4}  {t1:<4} {t2:<4} {s1:<4} {s2:<4}")
-
-        # Update remainders
-        r = r1 - q * r2
-        r1, r2 = r2, r
-
-        # Update t values
+    while b1 != 0:
+        q = a1 // b1
+        r = a1 % b1
+        s = s1 - q * s2
         t = t1 - q * t2
+
+        # Print row
+        print(f"{a1:<6} {b1:<6} {q:<6} {r:<6} {s1:<6} {s2:<6} {s:<6} {t1:<6} {t2:<6} {t:<6}")
+
+        # Shift values (move row down)
+        a1, b1 = b1, r
+        s1, s2 = s2, s
         t1, t2 = t2, t
 
-        # Update s values
-        s = s1 - q * s2
-        s1, s2 = s2, s
+    # Final row (when b1 == 0)
+    print(f"{a1:<6} {b1:<6} {'-':<6} {'-':<6} {s1:<6} {s2:<6} {'-':<6} {t1:<6} {t2:<6} {'-':<6}")
 
-    print(f"{r1:<4} {r2:<4} {'-':<4}  {t1:<4} {t2:<4} {s1:<4} {s2:<4}")
-    print("------------------------------------")
+    gcd = a1
+    x = s1
+    y = t1
 
-    # r1 is gcd, coefficients are t1 and s1
-    return r1, t1, s1
+    print("\nResult:")
+    print(f"gcd = {gcd}")
+    print(f"x = {x}, y = {y}")
+    print(f"{a}*({x}) + {b}*({y}) = {gcd}")
+
+    return gcd, x, y
 
 
 def mod_inverse(a, m):
     gcd, x, y = extended_euclid(a, m)
     if gcd != 1:
+        print("Inverse does not exist.")
         return None
     return x % m
 
@@ -44,34 +48,29 @@ def mod_inverse(a, m):
 def menu():
     while True:
         print("\n===== MENU =====")
-        print("1. GCD using Extended Euclid (with t, t1, t2)")
+        print("1. Extended Euclid (formatted table)")
         print("2. Modular Inverse")
         print("3. Exit")
-        choice = int(input("Enter your choice: "))
 
-        if choice == 1:
+        ch = int(input("Enter choice: "))
+
+        if ch == 1:
             a = int(input("Enter a: "))
             b = int(input("Enter b: "))
-            gcd, x, y = extended_euclid(a, b)
-            print(f"\nGCD({a}, {b}) = {gcd}")
-            print(f"Coefficients: x = {x}, y = {y}")
-            print(f"{a}*({x}) + {b}*({y}) = {gcd}")
+            extended_euclid(a, b)
 
-        elif choice == 2:
+        elif ch == 2:
             a = int(input("Enter a: "))
-            m = int(input("Enter modulus m: "))
+            m = int(input("Enter m: "))
             inv = mod_inverse(a, m)
-            if inv is None:
-                print("Inverse does NOT exist (gcd ≠ 1).")
-            else:
-                print(f"Modular inverse of {a} mod {m} = {inv}")
+            if inv is not None:
+                print(f"Modular inverse = {inv}")
 
-        elif choice == 3:
+        elif ch == 3:
             print("Exiting...")
             break
 
         else:
             print("Invalid choice!")
-
 
 menu()
